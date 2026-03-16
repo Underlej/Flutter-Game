@@ -1,0 +1,38 @@
+name: stick_man_adventure
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.10.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+<<<<<<< HEAD:stick_man_adventure/pubspec.yaml
+  flame: ^1.35.1
+  flame_tiled: ^3.0.11
+=======
+  flame: ^1.36.0
+  flame_tiled: ^3.1.0
+>>>>>>> 816109c42be1e2232d2e94db375b9d12c63b5332:gamef/pubspec.yaml
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+<<<<<<< HEAD:stick_man_adventure/pubspec.yaml
+  assets:
+  - assets\images\sprites\
+  - assets\images\player\
+  - assets\tiles\
+  - assets\images\HUD\
+=======
+
+assets:
+  - assets/tiles/
+  - assets/images/
+>>>>>>> 816109c42be1e2232d2e94db375b9d12c63b5332:gamef/pubspec.yaml
