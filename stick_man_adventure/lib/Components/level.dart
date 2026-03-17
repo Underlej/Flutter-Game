@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:stick_man_adventure/Components/Coin.dart';
+import 'package:stick_man_adventure/Components/background_tile.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
 import 'package:stick_man_adventure/Components/player.dart';
+import 'package:stick_man_adventure/Game2D.dart';
 
-class Level extends World{
+class Level extends World with HasGameReference<Game2d>{
   final String levelName;
   final Player player;
   Level({required this.levelName, required this.player});
@@ -18,6 +21,37 @@ class Level extends World{
 
     add(level);
 
+    _scrollingBackground();
+    _spawningObjects();
+    _addCollisions(); 
+
+    return super.onLoad();
+  }
+  
+  void _scrollingBackground() {
+    final backgroundLayer = level.tileMap.getLayer('Background');
+    const tileSize = 32;
+    final numTilesY = (game.size.y / tileSize).floor();
+    final numTilesX = (game.size.x / tileSize).floor();
+
+    if (backgroundLayer != null){
+      final backgroundColor = 
+          backgroundLayer.properties.getValue('BackgroundColor');
+
+      for (double y = 0; y < game.size.y / numTilesY; y++) {
+        for (double x = 0; x < numTilesX; x++) {
+          final backgroundTile = BackgroundTile(
+            color: backgroundColor ?? 'Blue',
+            position: Vector2(x * tileSize, y * tileSize - tileSize)
+          );
+
+          add(backgroundTile);
+        }
+      }
+    }
+  }
+  
+  void _spawningObjects() {
     final spawnPointsLayer = level.tileMap.getLayer<ObjectGroup>('SpawnPoint');
     
     if (spawnPointsLayer != null){
@@ -27,10 +61,19 @@ class Level extends World{
             player.position = Vector2(spawnPoint.x, spawnPoint.y);
             add(player);
             break;
+          case 'Coin':
+            final coin = Coin(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height)
+            );
+            add(coin);
+            break;
         }
       }
     }
-    
+  }
+  
+  void _addCollisions() {
     final collisionLayer = level.tileMap.getLayer<ObjectGroup>('Collisions');
 
     if (collisionLayer != null){
@@ -56,6 +99,5 @@ class Level extends World{
       }
     }
     player.collisionBlocks = collisionBlocks;
-    return super.onLoad();
   }
 }

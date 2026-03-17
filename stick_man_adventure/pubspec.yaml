@@ -20,7 +20,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-  - assets\images\sprites\
-  - assets\images\player\
-  - assets\tiles\
-  - assets\images\HUD\
+  - assets/images/sprites/
+  - assets/images/player/
+  - assets/images/Background/
+  - assets/images/items/
+  - assets/tiles/
+  - assets/images/HUD/

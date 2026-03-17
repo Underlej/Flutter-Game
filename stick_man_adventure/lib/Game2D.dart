@@ -7,7 +7,8 @@ import 'package:stick_man_adventure/Components/player.dart';
 import 'package:stick_man_adventure/Components/level.dart';
 import 'package:flutter/painting.dart';
 
-class Game2d extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks{
+class Game2d extends FlameGame
+ with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection{
   late final CameraComponent cam;
   Player player = Player(character: 'player');
   late JoystickComponent joystick;

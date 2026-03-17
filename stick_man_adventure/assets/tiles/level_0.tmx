@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="44">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="50">
  <tileset firstgid="1" source="SetTiled.tsx"/>
- <layer id="1" name="Backgroud" width="40" height="23" offsetx="0" offsety="-3.5">
+ <layer id="1" name="Background" width="40" height="23" offsetx="0" offsety="-3.5">
+  <properties>
+   <property name="BackgroundColor" value="Blue"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,70,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,107,71,0,
@@ -12,8 +15,8 @@
 0,88,26,27,27,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,82,83,62,84,62,0,0,0,0,0,0,0,86,0,
 0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,122,123,123,123,123,123,123,123,123,123,123,124,0,0,0,0,0,0,0,86,0,
 0,88,0,0,62,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,0,
-0,88,0,122,123,123,123,123,124,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2147483676,2147483675,2147483674,86,0,
-0,88,0,0,0,0,0,0,0,0,0,62,82,83,62,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,0,
+0,88,0,122,123,123,123,123,124,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,0,
+0,88,0,0,0,0,0,0,0,0,0,62,82,83,62,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2147483676,2147483675,2147483674,86,0,
 0,88,0,0,0,0,0,0,0,0,122,123,123,123,123,123,123,123,123,123,123,123,124,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,86,0,
 0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2147483676,2147483675,2147483675,2147483674,86,0,
 0,88,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,122,123,123,123,123,124,0,0,0,0,0,0,0,0,86,0,
@@ -46,7 +49,7 @@
   <object id="33" x="64" y="124" width="16" height="16"/>
   <object id="34" x="176" y="156" width="64" height="16"/>
   <object id="35" type="Platform" x="544" y="188" width="64" height="4"/>
-  <object id="36" type="Platform" x="560" y="140" width="48" height="4"/>
+  <object id="36" type="Platform" x="560" y="156" width="48" height="4"/>
   <object id="37" type="Platform" x="32" y="92" width="64" height="4"/>
   <object id="38" x="416" y="92" width="16" height="16"/>
   <object id="39" x="432" y="76" width="48" height="32"/>
@@ -57,5 +60,8 @@
  </objectgroup>
  <objectgroup id="2" name="SpawnPoint">
   <object id="1" name="Player" type="Player" x="128" y="264" width="9" height="26"/>
+  <object id="47" name="Coin" type="Coin" x="48" y="60" width="32" height="32"/>
+  <object id="48" name="Coin" type="Coin" x="432" y="44" width="32" height="32"/>
+  <object id="49" name="Coin" type="Coin" x="576" y="124" width="32" height="32"/>
  </objectgroup>
 </map>
