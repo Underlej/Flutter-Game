@@ -3,8 +3,8 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:stick_man_adventure/actors/player.dart';
-import 'package:stick_man_adventure/levels/level.dart';
+import 'package:stick_man_adventure/Components/player.dart';
+import 'package:stick_man_adventure/Components/level.dart';
 import 'package:flutter/painting.dart';
 
 class Game2d extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks{
@@ -13,7 +13,7 @@ class Game2d extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks{
   late JoystickComponent joystick;
 
   @override
-  Color backgroundColor() => const Color.fromARGB(255, 255, 255, 255);
+  Color backgroundColor() => const Color.fromARGB(255, 97, 91, 91);
 
   @override
   FutureOr<void> onLoad() async{
@@ -63,15 +63,18 @@ class Game2d extends FlameGame with HasKeyboardHandlerComponents, DragCallbacks{
       case JoystickDirection.left:
       case JoystickDirection.upLeft:
       case JoystickDirection.downLeft:
-        player.playerDirection = PlayerDirection.left;
+        player.horizontalMovement = -1;
         break;
       case JoystickDirection.right:
       case JoystickDirection.upRight:
       case JoystickDirection.downRight:
-        player.playerDirection = PlayerDirection.right;
+        player.horizontalMovement = 1;
+        break;
+      case JoystickDirection.up:
+        player.hasJumped = true;
         break;
       default:
-        player.playerDirection = PlayerDirection.none;
+        player.horizontalMovement = 0;
         break;
     }
   }
