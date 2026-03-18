@@ -14,7 +14,7 @@ class Game2d extends FlameGame
   late JoystickComponent joystick;
 
   @override
-  Color backgroundColor() => const Color.fromARGB(255, 97, 91, 91);
+  Color backgroundColor() => const Color.fromRGBO(34, 32, 52, 100);
 
   @override
   FutureOr<void> onLoad() async{

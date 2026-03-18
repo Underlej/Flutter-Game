@@ -7,6 +7,7 @@ import 'package:stick_man_adventure/Components/background_tile.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
 import 'package:stick_man_adventure/Components/player.dart';
 import 'package:stick_man_adventure/Game2D.dart';
+import 'package:stick_man_adventure/Components/serych.dart';
 
 class Level extends World with HasGameReference<Game2d>{
   final String levelName;
@@ -67,6 +68,19 @@ class Level extends World with HasGameReference<Game2d>{
               size: Vector2(spawnPoint.width, spawnPoint.height)
             );
             add(coin);
+            break;
+          case 'Serych':
+          final isVertical = spawnPoint.properties.getValue('isVertical');
+          final offNeg = spawnPoint.properties.getValue('offNeg');
+          final offPos = spawnPoint.properties.getValue('offPos');
+            final serych = Serych(
+              offNeg: offNeg,
+              offPos: offPos,
+              isVertical: isVertical,
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height)
+            );
+            add(serych);
             break;
         }
       }

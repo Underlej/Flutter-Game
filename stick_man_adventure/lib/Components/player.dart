@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:stick_man_adventure/Components/Coin.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
 import 'package:stick_man_adventure/Components/custom_hitbox.dart';
+import 'package:stick_man_adventure/Components/serych.dart';
 import 'package:stick_man_adventure/Components/utils.dart';
 import 'package:stick_man_adventure/Game2D.dart';
 import 'package:flame/components.dart';
 
-enum PlayerState { idle, running, jumping, falling }
+enum PlayerState { idle, running, jumping, falling, hit, appearing }
 
 class Player extends SpriteAnimationGroupComponent 
     with HasGameRef<Game2d>, KeyboardHandler, CollisionCallbacks {
@@ -23,15 +24,19 @@ class Player extends SpriteAnimationGroupComponent
   late final SpriteAnimation runningAnimation;
   late final SpriteAnimation jumpingAnimation;
   late final SpriteAnimation fallingAnimation;
+  late final SpriteAnimation hitAnimation;
+  late final SpriteAnimation appearingAnimation;
 
   final double _gravity = 9.8;
   final double _jumpForce = 200;
   final double _terminalVelocity = 300;
   double horizontalMovement = 0;
   double moveSpeed = 50;
+  Vector2 startingPosition = Vector2.zero();
   Vector2 velocity = Vector2.zero();
   bool isOnGround = false;
   bool hasJumped = false;
+  bool gotHit = false;
   List<CollisionBlock> collisionBlocks = [];
   final hitbox = CustomHitbox(
     offsetX: 0, 
@@ -42,7 +47,9 @@ class Player extends SpriteAnimationGroupComponent
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimation();
-    debugMode = true;
+    //debugMode = true;
+
+    startingPosition = Vector2(position.x, position.y);
     add(RectangleHitbox(
       position: Vector2(hitbox.offsetX, hitbox.offsetY),
       size: Vector2(hitbox.width, hitbox.height)
@@ -52,11 +59,14 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    _updatePlayerState();
-    _updatePlayerMovement(dt);
-    _checkHorizontalCollisions();
-    _applyGravity(dt);
-    _checkVerticalCollisions();
+    if (!gotHit){
+      _updatePlayerState();
+      _updatePlayerMovement(dt);
+      _checkHorizontalCollisions();
+      _applyGravity(dt);
+      _checkVerticalCollisions();
+    }
+    
     super.update(dt);
   }
 
@@ -79,6 +89,7 @@ class Player extends SpriteAnimationGroupComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Coin) other.collidedWithPlayer();
+    if (other is Serych) _respawn();
     super.onCollision(intersectionPoints, other);
   }
 
@@ -87,13 +98,17 @@ class Player extends SpriteAnimationGroupComponent
     runningAnimation = _spriteAnimation('Move', 6);
     jumpingAnimation = _spriteAnimation('Jump', 1);
     fallingAnimation = _spriteAnimation('Fall', 1);
+    hitAnimation = _spriteAnimation('Hit', 10);
+    appearingAnimation = _spriteAnimation('Appearing', 6);
 
     // список всех анимаций
     animations = {
       PlayerState.idle: idleAnimation,
       PlayerState.running: runningAnimation,
       PlayerState.jumping: jumpingAnimation,
-      PlayerState.falling: fallingAnimation
+      PlayerState.falling: fallingAnimation,
+      PlayerState.hit: hitAnimation,
+      PlayerState.appearing: appearingAnimation,
     };
 
     //установка текущей анимации
@@ -199,5 +214,24 @@ class Player extends SpriteAnimationGroupComponent
         }
       }
     }
+  }
+  
+  void _respawn() {
+    const hitDuration = Duration(milliseconds: 1200);
+    const appearingDuration = Duration(milliseconds: 940);
+    const canMoveDuration = Duration(milliseconds: 400);
+    gotHit = true;
+    current = PlayerState.hit;
+    Future.delayed(hitDuration, () {
+      scale.x = 1;
+      position = startingPosition;
+      current = PlayerState.appearing;
+      Future.delayed(appearingDuration, () {
+        velocity = Vector2.zero();
+        _updatePlayerState();
+        Future.delayed(canMoveDuration, () => gotHit = false);
+      });
+    });
+    
   }
 }

@@ -24,5 +24,6 @@ flutter:
   - assets/images/player/
   - assets/images/Background/
   - assets/images/items/
+  - assets/images/characters/
   - assets/tiles/
   - assets/images/HUD/
