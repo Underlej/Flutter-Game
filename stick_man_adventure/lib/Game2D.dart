@@ -12,6 +12,7 @@ class Game2d extends FlameGame
   late final CameraComponent cam;
   Player player = Player(character: 'player');
   late JoystickComponent joystick;
+  final int amountCoins = 0;
 
   @override
   Color backgroundColor() => const Color.fromRGBO(34, 32, 52, 100);

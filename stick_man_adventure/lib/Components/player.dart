@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flutter/services.dart';
 import 'package:stick_man_adventure/Components/Coin.dart';
+import 'package:stick_man_adventure/Components/checkpoint.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
 import 'package:stick_man_adventure/Components/custom_hitbox.dart';
 import 'package:stick_man_adventure/Components/serych.dart';
@@ -37,6 +38,7 @@ class Player extends SpriteAnimationGroupComponent
   bool isOnGround = false;
   bool hasJumped = false;
   bool gotHit = false;
+  bool reachedCheckpoint = false;
   List<CollisionBlock> collisionBlocks = [];
   final hitbox = CustomHitbox(
     offsetX: 0, 
@@ -88,8 +90,11 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Coin) other.collidedWithPlayer();
-    if (other is Serych) _respawn();
+    if (!reachedCheckpoint){
+      if (other is Coin) other.collidedWithPlayer();
+      if (other is Serych) _respawn();
+      if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
+    }
     super.onCollision(intersectionPoints, other);
   }
 
@@ -233,5 +238,19 @@ class Player extends SpriteAnimationGroupComponent
       });
     });
     
+  }
+  
+  void _reachedCheckpoint() {
+    reachedCheckpoint = true;
+    const reachedCheckpointDuration = Duration(milliseconds: 50);
+    Future.delayed(reachedCheckpointDuration, () {
+      reachedCheckpoint = false;
+      position = Vector2.all(-640);
+      
+      const waitToChangeDuration = Duration(seconds: 3);
+      Future.delayed(waitToChangeDuration, () {
+        // переход между уровнями (или меню)
+      });
+    });
   }
 }

@@ -4,6 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:stick_man_adventure/Components/Coin.dart';
 import 'package:stick_man_adventure/Components/background_tile.dart';
+import 'package:stick_man_adventure/Components/checkpoint.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
 import 'package:stick_man_adventure/Components/player.dart';
 import 'package:stick_man_adventure/Game2D.dart';
@@ -15,6 +16,7 @@ class Level extends World with HasGameReference<Game2d>{
   Level({required this.levelName, required this.player});
   late TiledComponent level;
   List<CollisionBlock> collisionBlocks = [];
+  
 
   @override
   FutureOr<void> onLoad() async{
@@ -81,6 +83,13 @@ class Level extends World with HasGameReference<Game2d>{
               size: Vector2(spawnPoint.width, spawnPoint.height)
             );
             add(serych);
+            break;
+          case 'CheckPoint':
+            final checkpoint = Checkpoint(
+              position: Vector2(spawnPoint.x, spawnPoint.y),
+              size: Vector2(spawnPoint.width, spawnPoint.height)
+            );
+            add(checkpoint);
             break;
         }
       }
