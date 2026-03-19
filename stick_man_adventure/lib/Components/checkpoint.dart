@@ -11,7 +11,6 @@ class Checkpoint extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
-    //debugMode = true;
     add(RectangleHitbox(
       position: Vector2(16, 16),
       size: Vector2(16, 32),
@@ -29,19 +28,19 @@ class Checkpoint extends SpriteAnimationComponent
 
   bool reachedCheckpoints = false;
 
-  // @override
-  // void update(double dt) {
-  //   if (game.amountCoins == 3) _reachedCheckpoint();
-  //   super.update(dt);
-  // }
+  @override
+  void update(double dt) {
+    if (game.player.amountCoins == 3) _openCheckpoint();
+    super.update(dt);
+  }
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Player && !reachedCheckpoints) _reachedCheckpoint();
+    if (other is Player && !reachedCheckpoints && game.player.amountCoins == 3) _reachedCheckpoint();
     super.onCollision(intersectionPoints, other);
   }
-  
-  void _reachedCheckpoint() {
+
+  void _openCheckpoint(){
     reachedCheckpoints = true;
     animation = SpriteAnimation.fromFrameData(
       game.images.fromCache('items/checkpoint/CkeckpointActive.png'),
@@ -52,7 +51,9 @@ class Checkpoint extends SpriteAnimationComponent
         loop: false
       )
     );
-    
+  }
+  
+  void _reachedCheckpoint() {
     const doorDuration = Duration(milliseconds: 50);
     Future.delayed(doorDuration, () {
       animation = SpriteAnimation.fromFrameData(

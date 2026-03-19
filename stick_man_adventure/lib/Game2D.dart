@@ -3,18 +3,20 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:stick_man_adventure/Components/jump_button.dart';
 import 'package:stick_man_adventure/Components/player.dart';
 import 'package:stick_man_adventure/Components/level.dart';
 import 'package:flutter/painting.dart';
+import 'game_complete_screen.dart';
 
 class Game2d extends FlameGame
  with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection{
   late CameraComponent cam;
   Player player = Player(character: 'player');
   late JoystickComponent joystick;
-  // final int amountCoins = 0;
-  List<String> levelNames = ['level_0', 'level_0'];
+  List<String> levelNames = ['level_0', 'level_1'];
   int currentLevelIndex = 0;
   JumpButton jumpButton = JumpButton();
 
@@ -77,9 +79,22 @@ class Game2d extends FlameGame
       currentLevelIndex++;
       _loadLevel();
     } else {
-      // уровней не будет
+      _showGameComplete();
     }
   }
+
+  void _showGameComplete() {
+  final context = findGame()?.buildContext;
+  
+  if (context != null) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const GameCompleteScreen(),
+      ),
+    );
+  }
+}
   
   void _loadLevel() {
     Future.delayed(const Duration(seconds: 1), () {

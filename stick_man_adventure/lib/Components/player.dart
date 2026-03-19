@@ -46,11 +46,11 @@ class Player extends SpriteAnimationGroupComponent
     height: 26);
     double fixedDeltaTime = 1 / 60;
     double accumulatedTime = 0;
+    int amountCoins = 0;
 
   @override
   FutureOr<void> onLoad() {
     _loadAllAnimation();
-    //debugMode = true;
 
     startingPosition = Vector2(position.x, position.y);
     add(RectangleHitbox(
@@ -145,8 +145,6 @@ class Player extends SpriteAnimationGroupComponent
 
     if (hasJumped && isOnGround) _playerJump(dt);
 
-    //if (velocity.y > _gravity) isOnGround = false; optional
-
     velocity.x = horizontalMovement * moveSpeed;
     position.x += velocity.x * dt;
   }
@@ -230,16 +228,20 @@ class Player extends SpriteAnimationGroupComponent
   }
   
   void _reachedCheckpoint() {
-    reachedCheckpoint = true;
-    const reachedCheckpointDuration = Duration(milliseconds: 50);
-    Future.delayed(reachedCheckpointDuration, () {
-      reachedCheckpoint = false;
-      position = Vector2.all(-640);
+    if (game.player.amountCoins == 3)
+    {
+      reachedCheckpoint = true;
+      const reachedCheckpointDuration = Duration(milliseconds: 50);
+      Future.delayed(reachedCheckpointDuration, () {
+        reachedCheckpoint = false;
+        position = Vector2.all(-640);
       
-      const waitToChangeDuration = Duration(seconds: 3);
-      Future.delayed(waitToChangeDuration, () {
-        game.loadNextLevel();
+        const waitToChangeDuration = Duration(seconds: 2);
+        Future.delayed(waitToChangeDuration, () {
+          game.loadNextLevel();
       });
     });
+    }
+    
   }
 }

@@ -22,7 +22,6 @@ with HasGameReference<Game2d>, CollisionCallbacks{
 
     @override
   FutureOr<void> onLoad() {
-    //debugMode = true;
 
     add(RectangleHitbox(
       position: Vector2(hitbox.offsetX, hitbox.offsetY),
@@ -52,5 +51,6 @@ with HasGameReference<Game2d>, CollisionCallbacks{
       const Duration(milliseconds: 780),
       () => removeFromParent()
     );
+    game.player.amountCoins += 1;
   }
 }

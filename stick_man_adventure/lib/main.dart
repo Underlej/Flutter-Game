@@ -1,14 +1,23 @@
-import 'package:flame/flame.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flame/game.dart';
-import 'package:stick_man_adventure/Game2D.dart';
+import 'loading.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Flame.device.fullScreen();
-  await Flame.device.setLandscape();
+void main() {
+  runApp(const MyApp());
+}
 
-  Game2d game = Game2d();
-  runApp(GameWidget(game: kDebugMode ? Game2d() : game));
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Stickman Adventure',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        useMaterial3: true,
+      ),
+      home: const LoadingScreen(), // Запускаем с экрана загрузки
+    );
+  }
 }
