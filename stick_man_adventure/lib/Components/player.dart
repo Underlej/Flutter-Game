@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flame/collisions.dart';
-import 'package:flutter/services.dart';
 import 'package:stick_man_adventure/Components/Coin.dart';
 import 'package:stick_man_adventure/Components/checkpoint.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
@@ -14,7 +13,7 @@ import 'package:flame/components.dart';
 enum PlayerState { idle, running, jumping, falling, hit, appearing }
 
 class Player extends SpriteAnimationGroupComponent 
-    with HasGameRef<Game2d>, KeyboardHandler, CollisionCallbacks {
+    with HasGameReference<Game2d>, KeyboardHandler, CollisionCallbacks { 
   String character;
   Player({position, 
   this.character = 'player'
@@ -45,6 +44,8 @@ class Player extends SpriteAnimationGroupComponent
     offsetY: 0, 
     width: 9, 
     height: 26);
+    double fixedDeltaTime = 1 / 60;
+    double accumulatedTime = 0;
 
   @override
   FutureOr<void> onLoad() {
@@ -61,41 +62,29 @@ class Player extends SpriteAnimationGroupComponent
 
   @override
   void update(double dt) {
-    if (!gotHit){
-      _updatePlayerState();
-      _updatePlayerMovement(dt);
-      _checkHorizontalCollisions();
-      _applyGravity(dt);
-      _checkVerticalCollisions();
+    accumulatedTime += dt;
+    while (accumulatedTime >= fixedDeltaTime){
+      if (!gotHit && !reachedCheckpoint){
+        _updatePlayerState();
+        _updatePlayerMovement(fixedDeltaTime);
+        _checkHorizontalCollisions();
+        _applyGravity(fixedDeltaTime);
+        _checkVerticalCollisions();
+      }
+      accumulatedTime -= fixedDeltaTime;
     }
     
     super.update(dt);
   }
 
   @override
-  bool onKeyEvent(KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
-    horizontalMovement = 0;
-    final isLeftKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyA) ||
-     keysPressed.contains(LogicalKeyboardKey.arrowLeft);
-    final isRightKeyPressed = keysPressed.contains(LogicalKeyboardKey.keyD) ||
-     keysPressed.contains(LogicalKeyboardKey.arrowRight);
-
-    horizontalMovement += isLeftKeyPressed ? -1 : 0;
-    horizontalMovement += isRightKeyPressed ? 1 : 0;
-
-    hasJumped = keysPressed.contains(LogicalKeyboardKey.space);
-
-    return super.onKeyEvent(event, keysPressed);
-  }
-
-  @override
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint){
       if (other is Coin) other.collidedWithPlayer();
       if (other is Serych) _respawn();
       if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
     }
-    super.onCollision(intersectionPoints, other);
+    super.onCollisionStart(intersectionPoints, other);
   }
 
   void _loadAllAnimation() {
@@ -249,7 +238,7 @@ class Player extends SpriteAnimationGroupComponent
       
       const waitToChangeDuration = Duration(seconds: 3);
       Future.delayed(waitToChangeDuration, () {
-        // переход между уровнями (или меню)
+        game.loadNextLevel();
       });
     });
   }

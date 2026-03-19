@@ -11,7 +11,7 @@ class Checkpoint extends SpriteAnimationComponent
 
   @override
   FutureOr<void> onLoad() {
-    debugMode = true;
+    //debugMode = true;
     add(RectangleHitbox(
       position: Vector2(16, 16),
       size: Vector2(16, 32),
