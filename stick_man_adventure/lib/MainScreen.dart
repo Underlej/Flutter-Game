@@ -102,7 +102,7 @@ class MainScreen extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               final startGame = StartGame();
-                              startGame.start();
+                              startGame.start(context);
                             },
                             borderRadius: BorderRadius.circular(50),
                             child: Center(

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flame/collisions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:stick_man_adventure/Components/Coin.dart';
 import 'package:stick_man_adventure/Components/checkpoint.dart';
 import 'package:stick_man_adventure/Components/collision_block.dart';
@@ -80,7 +81,10 @@ class Player extends SpriteAnimationGroupComponent
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (!reachedCheckpoint){
-      if (other is Coin) other.collidedWithPlayer();
+      if (other is Coin){
+        if (game.playSounds) FlameAudio.play('pickupCoin.wav', volume: game.settingsSound.soundVolume);
+        other.collidedWithPlayer();
+      } 
       if (other is Serych) _respawn();
       if (other is Checkpoint && !reachedCheckpoint) _reachedCheckpoint();
     }
@@ -150,6 +154,9 @@ class Player extends SpriteAnimationGroupComponent
   }
 
   void _playerJump(double dt) {
+    if (game.playSounds) {
+      FlameAudio.play('jump.wav', volume: game.settingsSound.soundVolume);
+    }
     velocity.y = - _jumpForce;
     position.y += velocity.y * dt;
     isOnGround = false;
@@ -209,6 +216,7 @@ class Player extends SpriteAnimationGroupComponent
   }
   
   void _respawn() {
+    if (game.playSounds) FlameAudio.play('hit.wav', volume: game.settingsSound.soundVolume);
     const hitDuration = Duration(milliseconds: 1200);
     const appearingDuration = Duration(milliseconds: 940);
     const canMoveDuration = Duration(milliseconds: 400);
@@ -238,7 +246,10 @@ class Player extends SpriteAnimationGroupComponent
       
         const waitToChangeDuration = Duration(seconds: 2);
         Future.delayed(waitToChangeDuration, () {
-          game.loadNextLevel();
+          if (game.player.amountCoins == 3)
+          {
+            game.loadNextLevel();
+          }
       });
     });
     }

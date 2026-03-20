@@ -10,15 +10,18 @@ import 'package:stick_man_adventure/Components/player.dart';
 import 'package:stick_man_adventure/Components/level.dart';
 import 'package:flutter/painting.dart';
 import 'game_complete_screen.dart';
+import 'game_setting.dart';
 
 class Game2d extends FlameGame
- with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection{
+ with HasKeyboardHandlerComponents, DragCallbacks, HasCollisionDetection, HasGameReference<Game2d>{
   late CameraComponent cam;
   Player player = Player(character: 'player');
   late JoystickComponent joystick;
   List<String> levelNames = ['level_0', 'level_1'];
   int currentLevelIndex = 0;
   JumpButton jumpButton = JumpButton();
+  bool playSounds = true;
+  final GameSettings settingsSound = GameSettings();
 
   @override
   Color backgroundColor() => const Color.fromRGBO(34, 32, 52, 100);
@@ -77,6 +80,7 @@ class Game2d extends FlameGame
   void loadNextLevel(){
     if (currentLevelIndex < levelNames.length - 1){
       currentLevelIndex++;
+      game.onRemove();
       _loadLevel();
     } else {
       _showGameComplete();
@@ -84,20 +88,20 @@ class Game2d extends FlameGame
   }
 
   void _showGameComplete() {
-  final context = findGame()?.buildContext;
-  
-  if (context != null) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const GameCompleteScreen(),
-      ),
-    );
+    final context = buildContext;
+    if (context != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GameCompleteScreen(),
+        ),
+      );
+    }
   }
-}
   
   void _loadLevel() {
     Future.delayed(const Duration(seconds: 1), () {
+      game.player.amountCoins = 0;
       Level world = Level(
         player: player,
         levelName: levelNames[currentLevelIndex]

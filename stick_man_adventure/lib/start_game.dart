@@ -4,18 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:stick_man_adventure/Game2D.dart';
 
-class StartGame{
-  void start() async{
-    WidgetsFlutterBinding.ensureInitialized();
+class StartGame {
+  void start(BuildContext context) async {
     await Flame.device.fullScreen();
     await Flame.device.setLandscape();
 
-    Game2d game = Game2d();
-    runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: GameWidget(
-          game: kDebugMode ? Game2d() : game,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameWidget(
+          game: Game2d(),
         ),
       ),
     );

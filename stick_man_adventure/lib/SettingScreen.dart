@@ -9,13 +9,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  
+  final gameSettings = GameSettings();
 
   @override
   Widget build(BuildContext context) {
-    final gameSettings = GameSettings();
-
     double _musicVolume = gameSettings.musicVolume;
+    double _soundVolume = gameSettings.soundVolume;
 
     return Scaffold(
       backgroundColor: Colors.grey[850],
@@ -77,14 +76,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   children: [
                     _buildVolumeSlider(
-                      icon: Icons.music_note,
-                      iconColor: Colors.blue,
-                      title: 'Громкость музыки',
-                      value: _musicVolume,
+                      icon: Icons.volume_up,
+                      iconColor: Colors.green,
+                      title: 'Громкость звуков',
+                      value: _soundVolume,
                       onChanged: (value) {
                         setState(() {
-                          _musicVolume = value;
-                          GameSettings().musicVolume = value;
+                          _soundVolume = value;
+                          GameSettings().soundVolume = value;
                         });
                       },
                     ),
@@ -92,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 20),
           ],
         ),
